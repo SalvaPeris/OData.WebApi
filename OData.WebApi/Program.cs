@@ -25,6 +25,7 @@ builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "OData API", Version = "v1" });
+    c.OperationFilter<ODataOperationFilter>();
 });
 
 builder.Services.AddControllers()
