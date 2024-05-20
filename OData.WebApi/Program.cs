@@ -25,21 +25,18 @@ builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "OData API", Version = "v1" });
-    c.DocInclusionPredicate((_, api) => !string.IsNullOrWhiteSpace(api.GroupName));
-    c.TagActionsBy(api => new[] { api.GroupName });
-    c.OperationFilter<ODataOperationFilter>();
 });
 
 builder.Services.AddControllers()
-        .AddOData(options => options
-        .AddRouteComponents("odata", GetEdmModel())
-        .Select()
-        .Filter()
-        .OrderBy()
-        .SetMaxTop(20)
-        .Count()
-        .Expand()
-    ); ;
+        .AddOData(options => 
+            options
+                .Select()
+                .Filter()
+                .OrderBy()
+                .SetMaxTop(20)
+                .Count()
+                .Expand()
+    );
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

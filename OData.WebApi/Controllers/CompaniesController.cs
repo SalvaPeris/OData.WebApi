@@ -2,15 +2,16 @@
 using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Results;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
 using OData.WebApi.Entities;
+using OData.WebApi.Persistence.Filters;
 using OData.WebApi.Persistence.Repositories.Interfaces;
 
 namespace OData.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("odata/[controller]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "Companies")]
-    public class CompaniesController : ControllerBase
+    public class CompaniesController : ODataController
     {
         private readonly ICompanyRepository _companyRepository;
 
@@ -19,16 +20,16 @@ namespace OData.WebApi.Controllers
             _companyRepository = companyRepository;
         }
 
-        [EnableQuery(PageSize = 3)]
         [HttpGet]
+        [EnableQuery(PageSize = 20, AllowedQueryOptions = AllowedQueryOptions.All | AllowedQueryOptions.Count)]
         public IQueryable<Company> Get()
         {
             return _companyRepository.GetAll();
         }
 
+        [HttpGet("{key}")]
         [EnableQuery]
-        [HttpGet("{id}")]
-        public SingleResult<Company> Get([FromODataUri] Guid key)
+        public SingleResult<Company> Get([FromODataUri] int key)
         {
             return SingleResult.Create(_companyRepository.GetById(key));
         }
@@ -43,8 +44,8 @@ namespace OData.WebApi.Controllers
             return Created("companies", company);
         }
 
-        [HttpPut]
-        public IActionResult Put([FromODataUri] Guid key, [FromBody] Company company)
+        [HttpPut("{key}")]
+        public IActionResult Put([FromODataUri] int key, [FromBody] Company company)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -56,8 +57,8 @@ namespace OData.WebApi.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
-        public IActionResult Delete([FromODataUri] Guid key)
+        [HttpDelete("{key}")]
+        public IActionResult Delete([FromODataUri] int key)
         {
             var company = _companyRepository.GetById(key);
             if (company is null)

@@ -2,8 +2,8 @@
 {
     public class Product
     {
-        public Guid Id { get; set; }
-        public Guid CompanyId { get; set; }
+        public int Id { get; set; }
+        public int CompanyId { get; set; }
         public string? Name { get; set; }
         public decimal Price { get; set; }
     }

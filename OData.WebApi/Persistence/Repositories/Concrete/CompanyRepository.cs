@@ -17,7 +17,7 @@ namespace OData.WebApi.Persistence.Repositories.Concrete
                 .Include(a => a.Products)
                 .AsQueryable();
         }
-        public IQueryable<Company> GetById(Guid id)
+        public IQueryable<Company> GetById(int id)
         {
             return _context.Companies
                 .Include(a => a.Products)
