@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Formatter;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Results;
 using OData.WebApi.Entities;
 using OData.WebApi.Persistence.Repositories.Interfaces;
-using System.Web.Http.OData;
-using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace OData.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "Companies")]
     public class CompaniesController : ControllerBase
     {
         private readonly ICompanyRepository _companyRepository;
@@ -27,9 +28,9 @@ namespace OData.WebApi.Controllers
 
         [EnableQuery]
         [HttpGet("{id}")]
-        public System.Web.Http.SingleResult<Company> Get([FromODataUri] Guid key)
+        public SingleResult<Company> Get([FromODataUri] Guid key)
         {
-            return System.Web.Http.SingleResult.Create(_companyRepository.GetById(key));
+            return SingleResult.Create(_companyRepository.GetById(key));
         }
 
         [HttpPost]
